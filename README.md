@@ -1,4 +1,4 @@
-# ICYAGE Online Shop 🛍️
+# ICYAGWE Online Shop 🛍️
 
 An elegant and modern e-commerce website for fashion and lifestyle products.
 
