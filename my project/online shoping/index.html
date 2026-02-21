@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICYAGWE SHOP · Ibyo Ushaka Byose</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- QUICK VIEW MODAL -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <div id="modalImageContainer" class="modal-img"></div>
+                </div>
+                <div class="modal-details">
+                    <h2 id="modalTitle"></h2>
+                    <div class="modal-price" id="modalPrice"></div>
+                    <div class="modal-description" id="modalDescription"></div>
+                    <button class="btn modal-add-btn" id="modalAddToCart"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOVING NOTIFICATION TICKER -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item"><i class="fas fa-mobile-alt"></i> Electronics</div>
+            <div class="ticker-item"><i class="fas fa-tshirt"></i> Clothes & Shoes</div>
+            <div class="ticker-item"><i class="fas fa-clock"></i> Watches</div>
+            <div class="ticker-item"><i class="fas fa-gem"></i> Luxury</div>
+            <div class="ticker-item"><i class="fas fa-laptop"></i> Computers</div>
+            <div class="ticker-item"><i class="fas fa-couch"></i> Home & Garden</div>
+            <div class="ticker-item"><i class="fas fa-dumbbell"></i> Sports</div>
+            <div class="ticker-item"><i class="fas fa-car"></i> Automotive</div>
+            <div class="ticker-item"><i class="fas fa-dog"></i> Pet Supplies</div>
+            <!-- duplicate for seamless loop -->
+            <div class="ticker-item"><i class="fas fa-mobile-alt"></i> Electronics</div>
+            <div class="ticker-item"><i class="fas fa-tshirt"></i> Clothes & Shoes</div>
+            <div class="ticker-item"><i class="fas fa-clock"></i> Watches</div>
+            <div class="ticker-item"><i class="fas fa-gem"></i> Luxury</div>
+        </div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-links">
+                <a href="#">Help</a>
+                <a href="#">Support</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="top-right">
+                <span>Call: +250 796 649 792</span>
+                <!-- currency dropdown -->
+                <div class="dropdown">
+                    <div class="dropdown-trigger"><i class="fas fa-dollar-sign"></i> USD <i class="fas fa-chevron-down"></i></div>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">RWF</a></li>
+                        <li><a href="#">EUR</a></li>
+                    </ul>
+                </div>
+                <!-- language dropdown -->
+                <div class="dropdown">
+                    <div class="dropdown-trigger"><i class="fas fa-globe"></i> English <i class="fas fa-chevron-down"></i></div>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">English</a></li>
+                        <li><a href="#">French</a></li>
+                        <li><a href="#">Kinyarwanda</a></li>
+                    </ul>
+                </div>
+                <!-- Dark/Light mode toggle -->
+                <div class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <!-- USER DROPDOWN -->
+                <div class="dropdown" id="userDropdown">
+                    <div class="dropdown-trigger"><i class="fas fa-user-circle"></i> My Account <i class="fas fa-chevron-down"></i></div>
+                    <ul class="dropdown-menu">
+                        <li><a href="loginandsinup.html.html"><i class="fas fa-user-plus"></i> Sign Up & log in</a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a href="#"><i class="fas fa-id-card"></i> My Account</a></li>
+                        <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== HERO SLIDESHOW SECTION ========== -->
+    <div class="hero-slideshow">
+        <div class="slideshow-container" id="heroSlideshow">
+            <!-- slides will be injected by JavaScript -->
+        </div>
+        <!-- optional overlay -->
+        <div class="slideshow-overlay"></div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="nav-section">
+        <div class="container nav-container">
+            <button class="categories-btn"><i class="fas fa-bars"></i> ALL CATEGORIES</button>
+            <div class="category-panel">
+                <ul>
+                    <li><a href="#">Clothes & shoes</a> <span>103</span></li>
+                    <li><a href="#">Electronics</a> <span>105</span></li>
+                    <li><a href="#">Laptops</a> <span>112</span></li>
+                    <li><a href="#">Smartphones</a> <span>118</span></li>
+                    <li><a href="#">Others</a> <span>5</span></li>
+                </ul>
+            </div>
+            <div class="nav-links">
+                <div>
+                    <a href="index.html" class="active">HOME</a>
+                    <a href="shops.html">SHOPS</a>
+                    <a href="#">PAGES</a>
+                    <a href="#">CONTACT</a>
+                </div>
+                <a href="#" class="phone-btn"><i class="fas fa-phone-alt"></i> +250 796 649 792</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGO, SEARCH, CART SECTION (below navigation) -->
+    <div class="header-section">
+        <div class="container header-flex">
+            <img src="log.png.png" alt="ICYAGWE SHOP" class="logo-img" loading="lazy">
+            <div class="search-bar">
+                <input type="text" placeholder="Search from 300M+ Premium Products Around the World">
+                <select>
+                    <option>All Categories</option>
+                    <option>Clothes</option>
+                    <option>Shoes</option>
+                    <option>Electronics</option>
+                </select>
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="header-icons">
+                <i class="fas fa-heart"></i>
+                <a href="cart.html.html" class="cart-badge" id="cartLink">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="container">
+        <div class="services">
+            <div class="service-item"><i class="fas fa-sync-alt"></i> <span><strong>Free Return</strong><br>30 days</span></div>
+            <div class="service-item"><i class="fas fa-truck"></i> <span><strong>Free Shipping</strong><br>MUSANZE city</span></div>
+            <div class="service-item"><i class="fas fa-headset"></i> <span><strong>Support 24/7</strong><br>Online</span></div>
+            <div class="service-item"><i class="fas fa-gift"></i> <span><strong>Gift Card</strong><br>on $50+</span></div>
+            <div class="service-item"><i class="fas fa-lock"></i> <span><strong>Secure</strong><br>Payment</span></div>
+        </div>
+    </div>
+
+    <!-- OFFER BANNERS -->
+    <div class="container">
+        <div class="offers-grid">
+            <div class="offer-card">
+                <div class="offer-text"><h3>Smart Camera</h3><div class="offer-discount">40% OFF</div></div>
+                <div class="offer-icon"><i class="fas fa-camera"></i></div>
+            </div>
+            <div class="offer-card">
+                <div class="offer-text"><h3>Smart Watch</h3><div class="offer-discount">20% OFF</div></div>
+                <div class="offer-icon"><i class="fas fa-clock"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OUR PRODUCTS (10) -->
+    <div class="container" id="products-section">
+        <div class="section-header">
+            <h2 class="section-title">Our Products</h2>
+            <a href="#" class="view-all-btn">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="product-grid-new" id="product-grid-new">
+            <!-- Product 1 -->
+            <div class="product-card-new" data-id="1" data-name="10-Pack Waterproof PVC Card Holder" data-price="265" data-description="Durable waterproof PVC card holder. Keeps your cards safe and dry. Perfect for travel and daily use.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><img src="img/cardholder.jpg" alt=""></div>
+                <div class="product-title-new">10-Pack Waterproof PVC Card Holder</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$2<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card-new" data-id="2" data-name="Bathroom Drain Hair Catcher" data-price="261" data-description="Efficient hair catcher for bathroom drains. Prevents clogs and easy to clean.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><img src="img/louis vuitton jacket.jpg.jpg" alt=""></div>
+                <div class="product-title-new">louis vuitton jacket</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$18<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card-new" data-id="3" data-name="5pcs Mini Perfume Travel Bottle" data-price="253" data-description="Set of 5 mini perfume bottles. Leak-proof and refillable.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><img src="img/Mini Perfume Travel Bottle.jpg" alt=""></div>
+                <div class="product-title-new">5pcs Mini Perfume Travel Bottle</div>
+                <div class="product-status">in 205 carts</div>
+                <div class="product-price-new">$7<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 4 -->
+            <div class="product-card-new" data-id="4" data-name="10inch Silicone Spatula" data-price="246" data-description="Heat-resistant silicone spatula. Perfect for non-stick cookware.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-utensils"></i></div>
+                <div class="product-title-new">10inch Silicone Spatula</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$246<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 5 -->
+            <div class="product-card-new" data-id="5" data-name="Portable Bluetooth Speaker" data-price="89" data-description="Compact Bluetooth speaker with rich sound. Long battery life.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-speaker"></i></div>
+                <div class="product-title-new">Portable Bluetooth Speaker</div>
+                <div class="product-status">in 312 carts</div>
+                <div class="product-price-new">$89<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 6 -->
+            <div class="product-card-new" data-id="6" data-name="Wireless Earbuds" data-price="129" data-description="True wireless earbuds with charging case. Bluetooth 5.0.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-headphones"></i></div>
+                <div class="product-title-new">Wireless Earbuds</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$129<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 7 -->
+            <div class="product-card-new" data-id="7" data-name="Smart Watch Series 5" data-price="299" data-description="Advanced smartwatch with heart rate monitor, GPS, and sleep tracking.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-clock"></i></div>
+                <div class="product-title-new">Smart Watch Series 5</div>
+                <div class="product-status">in 98 carts</div>
+                <div class="product-price-new">$299<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 8 -->
+            <div class="product-card-new" data-id="8" data-name="LED Desk Lamp" data-price="45" data-description="Adjustable LED desk lamp with wireless charger. Eye-caring design.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-lightbulb"></i></div>
+                <div class="product-title-new">LED Desk Lamp</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$45<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 9 -->
+            <div class="product-card-new" data-id="9" data-name="Stainless Steel Water Bottle" data-price="35" data-description="Double-wall insulated stainless steel bottle. Keeps drinks cold for 24h.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-bottle-water"></i></div>
+                <div class="product-title-new">Stainless Steel Water Bottle</div>
+                <div class="product-status">in 150 carts</div>
+                <div class="product-price-new">$35<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Product 10 -->
+            <div class="product-card-new" data-id="10" data-name="Yoga Mat Non Slip" data-price="55" data-description="Eco-friendly non-slip yoga mat with carrying strap.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-puzzle-piece"></i></div>
+                <div class="product-title-new">Yoga Mat Non Slip</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$55<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BESTSELLERS (10) -->
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Bestsellers</h2>
+            <a href="#" class="view-all-btn">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="product-grid-new" id="bestseller-grid">
+            <!-- Bestseller 1 -->
+            <div class="product-card-new" data-id="101" data-name="iPhone 6" data-price="1050" data-description="Refurbished iPhone 6 in excellent condition.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-mobile-alt"></i></div>
+                <div class="product-title-new">iPhone 6</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$1,050<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 2 -->
+            <div class="product-card-new" data-id="102" data-name="Polaroid OneStep 2" data-price="699" data-description="Instant camera with built-in flash.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-camera-retro"></i></div>
+                <div class="product-title-new">Polaroid OneStep 2</div>
+                <div class="product-status">in 205 carts</div>
+                <div class="product-price-new">$699<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 3 -->
+            <div class="product-card-new" data-id="103" data-name="Smart Watch Pro" data-price="299" data-description="Fitness tracker with heart rate monitor.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-clock"></i></div>
+                <div class="product-title-new">Smart Watch Pro</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$299<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 4 -->
+            <div class="product-card-new" data-id="104" data-name="Wireless Headphones" data-price="199" data-description="Over-ear wireless headphones with noise cancellation.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-headphones"></i></div>
+                <div class="product-title-new">Wireless Headphones</div>
+                <div class="product-status">in 98 carts</div>
+                <div class="product-price-new">$199<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 5 -->
+            <div class="product-card-new" data-id="105" data-name="4K Smart TV" data-price="899" data-description="50-inch 4K UHD Smart TV with HDR.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-tv"></i></div>
+                <div class="product-title-new">4K Smart TV</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$899<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 6 -->
+            <div class="product-card-new" data-id="106" data-name="Air Fryer" data-price="159" data-description="4-quart air fryer with rapid air circulation.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-fan"></i></div>
+                <div class="product-title-new">Air Fryer 4Qt</div>
+                <div class="product-status">in 210 carts</div>
+                <div class="product-price-new">$159<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 7 -->
+            <div class="product-card-new" data-id="107" data-name="Gaming Mouse" data-price="49" data-description="RGB gaming mouse with adjustable DPI.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-mouse"></i></div>
+                <div class="product-title-new">Gaming Mouse</div>
+                <div class="product-status">in 320 carts</div>
+                <div class="product-price-new">$49<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 8 -->
+            <div class="product-card-new" data-id="108" data-name="Mechanical Keyboard" data-price="89" data-description="RGB mechanical keyboard with blue switches.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-keyboard"></i></div>
+                <div class="product-title-new">Mechanical Keyboard</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$89<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 9 -->
+            <div class="product-card-new" data-id="109" data-name="Portable Charger" data-price="39" data-description="10000mAh power bank with fast charging.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-battery-full"></i></div>
+                <div class="product-title-new">Portable Charger</div>
+                <div class="product-status">in 150 carts</div>
+                <div class="product-price-new">$39<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <!-- Bestseller 10 -->
+            <div class="product-card-new" data-id="110" data-name="HD Webcam" data-price="59" data-description="1080p webcam with built-in microphone.">
+                <div class="badge-best">#Best seller</div>
+                <div class="product-img-new"><i class="fas fa-video"></i></div>
+                <div class="product-title-new">HD Webcam</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$59<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOW PRICE PRODUCTS (10) -->
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Low Price Products</h2>
+            <a href="#" class="view-all-btn">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="product-grid-new" id="lowprice-grid">
+            <div class="product-card-new" data-id="201" data-name="Budget Bluetooth Speaker" data-price="29" data-description="Compact speaker, great sound.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-speaker"></i></div>
+                <div class="product-title-new">Budget Bluetooth Speaker</div>
+                <div class="product-status">Limited stock</div>
+                <div class="product-price-new">$29<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="202" data-name="USB-C Cable 2m" data-price="9" data-description="Fast charging, durable braided cable.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-plug"></i></div>
+                <div class="product-title-new">USB-C Cable 2m</div>
+                <div class="product-status">in 450 carts</div>
+                <div class="product-price-new">$9<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="203" data-name="Phone Stand" data-price="12" data-description="Adjustable aluminum phone stand.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-mobile-alt"></i></div>
+                <div class="product-title-new">Phone Stand</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$12<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="204" data-name="LED Keychain" data-price="5" data-description="Mini flashlight keychain.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-lightbulb"></i></div>
+                <div class="product-title-new">LED Keychain</div>
+                <div class="product-status">in 890 carts</div>
+                <div class="product-price-new">$5<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="205" data-name="Mouse Pad" data-price="8" data-description="Non-slip gaming mouse pad.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-mouse"></i></div>
+                <div class="product-title-new">Mouse Pad</div>
+                <div class="product-status">Limited stock</div>
+                <div class="product-price-new">$8<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="206" data-name="Screen Protector" data-price="7" data-description="Tempered glass, bubble-free.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-mobile-alt"></i></div>
+                <div class="product-title-new">Screen Protector</div>
+                <div class="product-status">in 320 carts</div>
+                <div class="product-price-new">$7<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="207" data-name="Micro SD Card 32GB" data-price="11" data-description="Class 10 memory card for phones.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-sd-card"></i></div>
+                <div class="product-title-new">Micro SD Card 32GB</div>
+                <div class="product-status">in 210 carts</div>
+                <div class="product-price-new">$11<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="208" data-name="Car Phone Holder" data-price="15" data-description="Universal air vent mount.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-car"></i></div>
+                <div class="product-title-new">Car Phone Holder</div>
+                <div class="product-status">Selling fast</div>
+                <div class="product-price-new">$15<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="209" data-name="Wireless Charger" data-price="22" data-description="Fast wireless charging pad.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-charging-station"></i></div>
+                <div class="product-title-new">Wireless Charger</div>
+                <div class="product-status">in 120 carts</div>
+                <div class="product-price-new">$22<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="210" data-name="Phone Grip" data-price="6" data-description="Adhesive phone grip stand.">
+                <div class="badge-best">🔥 Low Price</div>
+                <div class="product-img-new"><i class="fas fa-hand-rock"></i></div>
+                <div class="product-title-new">Phone Grip</div>
+                <div class="product-status">in 530 carts</div>
+                <div class="product-price-new">$6<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GIFT IDEAS (10) -->
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Gift Ideas</h2>
+            <a href="#" class="view-all-btn">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="product-grid-new" id="gift-grid">
+            <div class="product-card-new" data-id="301" data-name="Luxury Gift Box" data-price="49" data-description="Elegant gift box with assorted chocolates.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-gift"></i></div>
+                <div class="product-title-new">Luxury Gift Box</div>
+                <div class="product-status">Perfect for any occasion</div>
+                <div class="product-price-new">$49<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="302" data-name="Spa & Relax Set" data-price="79" data-description="Spa kit with candles, bath salts, and essential oils.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-spa"></i></div>
+                <div class="product-title-new">Spa & Relax Set</div>
+                <div class="product-status">Pamper them</div>
+                <div class="product-price-new">$79<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="303" data-name="Personalized Mug" data-price="19" data-description="Ceramic mug with custom text and design.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-mug-hot"></i></div>
+                <div class="product-title-new">Personalized Mug</div>
+                <div class="product-status">Make it special</div>
+                <div class="product-price-new">$19<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="304" data-name="Leather Wallet" data-price="89" data-description="Genuine leather wallet with multiple card slots.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-wallet"></i></div>
+                <div class="product-title-new">Leather Wallet</div>
+                <div class="product-status">Classic style</div>
+                <div class="product-price-new">$89<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="305" data-name="Perfume Set" data-price="129" data-description="Set of three luxury perfumes.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-spray-can"></i></div>
+                <div class="product-title-new">Perfume Set</div>
+                <div class="product-status">Fragrant delight</div>
+                <div class="product-price-new">$129<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="306" data-name="Wine & Cheese Basket" data-price="149" data-description="Premium wine and cheese selection in a beautiful basket.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-wine-bottle"></i></div>
+                <div class="product-title-new">Wine & Cheese Basket</div>
+                <div class="product-status">Gourmet treat</div>
+                <div class="product-price-new">$149<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="307" data-name="Jewelry Box" data-price="39" data-description="Velvet jewelry organizer.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-gem"></i></div>
+                <div class="product-title-new">Jewelry Box</div>
+                <div class="product-status">Elegant storage</div>
+                <div class="product-price-new">$39<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="308" data-name="Candle Set" data-price="29" data-description="Set of 3 scented candles.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-fire"></i></div>
+                <div class="product-title-new">Candle Set</div>
+                <div class="product-status">Cozy ambiance</div>
+                <div class="product-price-new">$29<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="309" data-name="Photo Frame" data-price="15" data-description="Elegant silver photo frame.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-image"></i></div>
+                <div class="product-title-new">Photo Frame</div>
+                <div class="product-status">Cherish memories</div>
+                <div class="product-price-new">$15<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="310" data-name="Desk Organizer" data-price="25" data-description="Bamboo desk organizer.">
+                <div class="badge-best">Gift</div>
+                <div class="product-img-new"><i class="fas fa-box"></i></div>
+                <div class="product-title-new">Desk Organizer</div>
+                <div class="product-status">Tidy workspace</div>
+                <div class="product-price-new">$25<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP SEARCHES (10) -->
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Top Searches</h2>
+        </div>
+        <div class="product-grid-new">
+            <div class="product-card-new" data-id="401" data-name="RoC Derm Correction Retinol Firming Serum Stick" data-price="45" data-description="Retinol serum with antioxidants.">
+                <div class="badge-best">US Store</div>
+                <div class="product-img-new"><i class="fas fa-spray-can"></i></div>
+                <div class="product-title-new">RoC Retinol Serum Stick</div>
+                <div class="product-status">with Antioxidants</div>
+                <div class="product-price-new">$45<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="402" data-name="Grabie Erasable Gel Pens, 9 Colors" data-price="12" data-description="Erasable gel pens, make mistakes and erase them easily.">
+                <div class="badge-best">US Store</div>
+                <div class="product-img-new"><i class="fas fa-pen"></i></div>
+                <div class="product-title-new">Erasable Gel Pens</div>
+                <div class="product-status">9 Colors</div>
+                <div class="product-price-new">$12<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="403" data-name="Instant Pot Duo 7-in-1" data-price="89" data-description="Electric pressure cooker.">
+                <div class="badge-best">Trending</div>
+                <div class="product-img-new"><i class="fas fa-cooker"></i></div>
+                <div class="product-title-new">Instant Pot Duo</div>
+                <div class="product-status">7-in-1</div>
+                <div class="product-price-new">$89<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="404" data-name="Yoga Mat" data-price="29" data-description="Non-slip exercise mat.">
+                <div class="badge-best">Fitness</div>
+                <div class="product-img-new"><i class="fas fa-puzzle-piece"></i></div>
+                <div class="product-title-new">Yoga Mat</div>
+                <div class="product-status">Eco-friendly</div>
+                <div class="product-price-new">$29<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="405" data-name="Electric Kettle" data-price="39" data-description="Fast boiling, stainless steel.">
+                <div class="badge-best">Kitchen</div>
+                <div class="product-img-new"><i class="fas fa-mug-saucer"></i></div>
+                <div class="product-title-new">Electric Kettle</div>
+                <div class="product-status">1.7L</div>
+                <div class="product-price-new">$39<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="406" data-name="Hair Dryer" data-price="49" data-description="Professional ionic hair dryer.">
+                <div class="badge-best">Beauty</div>
+                <div class="product-img-new"><i class="fas fa-wind"></i></div>
+                <div class="product-title-new">Hair Dryer</div>
+                <div class="product-status">with diffuser</div>
+                <div class="product-price-new">$49<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="407" data-name="Vacuum Cleaner" data-price="199" data-description="Cordless stick vacuum.">
+                <div class="badge-best">Home</div>
+                <div class="product-img-new"><i class="fas fa-broom"></i></div>
+                <div class="product-title-new">Vacuum Cleaner</div>
+                <div class="product-status">Cordless</div>
+                <div class="product-price-new">$199<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="408" data-name="Coffee Maker" data-price="79" data-description="12-cup programmable coffee maker.">
+                <div class="badge-best">Kitchen</div>
+                <div class="product-img-new"><i class="fas fa-mug-hot"></i></div>
+                <div class="product-title-new">Coffee Maker</div>
+                <div class="product-status">Programmable</div>
+                <div class="product-price-new">$79<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="409" data-name="Air Purifier" data-price="149" data-description="HEPA filter for allergies.">
+                <div class="badge-best">Health</div>
+                <div class="product-img-new"><i class="fas fa-wind"></i></div>
+                <div class="product-title-new">Air Purifier</div>
+                <div class="product-status">HEPA</div>
+                <div class="product-price-new">$149<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+            <div class="product-card-new" data-id="410" data-name="Smart Lock" data-price="129" data-description="Keyless entry with fingerprint.">
+                <div class="badge-best">Smart Home</div>
+                <div class="product-img-new"><i class="fas fa-lock"></i></div>
+                <div class="product-title-new">Smart Lock</div>
+                <div class="product-status">Fingerprint</div>
+                <div class="product-price-new">$129<span class="add-plus" onclick="addToCartFromCard(this)">+</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUBSCRIPTION CARD -->
+    <div class="container">
+        <div class="subscription-card">
+            <h3>Subscribe and receive <span class="discount-highlight">Discount up to 15%</span> on your first purchase.</h3>
+            <form class="subscription-form">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address*" required>
+                <select required>
+                    <option value="" disabled selected>Male</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+                <button type="submit" class="btn btn-secondary">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TESTIMONIALS SLIDER -->
+    <div class="container">
+        <div class="testimonials-slider">
+            <div class="testimonial-slide active">
+                <div class="rating">⭐⭐⭐⭐</div>
+                <p class="testimonial-text">I bought a coffee filter from the UK. It only took 5 days – excellent service!!!</p>
+                <div class="testimonial-author"><i class="fas fa-user-circle"></i> Andries Venter</div>
+                <span class="verified">Verified Customer</span>
+            </div>
+            <div class="testimonial-slide">
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">Amazing quality and fast shipping! Will definitely shop again.</p>
+                <div class="testimonial-author"><i class="fas fa-user-circle"></i> Ingabire Muuminat</div>
+                <span class="verified">Verified Customer</span>
+            </div>
+            <div class="testimonial-slide">
+                <div class="rating">⭐⭐⭐⭐</div>
+                <p class="testimonial-text">Great customer service and international shipping was smooth.</p>
+                <div class="testimonial-author"><i class="fas fa-user-circle"></i> Impfurayabombi Milha</div>
+                <span class="verified">Verified Customer</span>
+            </div>
+            <div class="testimonial-slide">
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">First time using ICYAGWE and I'm impressed. Item arrived sooner than expected.</p>
+                <div class="testimonial-author"><i class="fas fa-user-circle"></i> Hirwa Tuahir</div>
+                <span class="verified">Verified Customer</span>
+            </div>
+            <div class="testimonial-slide">
+                <div class="rating">⭐⭐⭐⭐</div>
+                <p class="testimonial-text">Very happy with my purchase. Quality is top‑notch.</p>
+                <div class="testimonial-author"><i class="fas fa-user-circle"></i> Snow</div>
+                <span class="verified">Verified Customer</span>
+            </div>
+            <div class="testimonial-slide">
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">Excellent customer support and quick delivery. Highly recommended!</p>
+                <div class="testimonial-author"><i class="fas fa-user-circle"></i> Kalisa Jean</div>
+                <span class="verified">Verified Customer</span>
+            </div>
+            <a class="testimonial-prev" onclick="moveTestimonial(-1)">&#10094;</a>
+            <a class="testimonial-next" onclick="moveTestimonial(1)">&#10095;</a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>ICYAGWE SHOP</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> MUSANZE CITY</p>
+                    <p><i class="fas fa-phone"></i> +250 796 649 792</p>
+                    <p><i class="fas fa-envelope"></i> cyagweshop@gmail.com</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Track Order</a>
+                    <a href="#">Shipping Policy</a>
+                    <a href="#">Return Policy</a>
+                    <a href="#">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>We Deliver To</h4>
+                    <ul class="city-list">
+                        <li>Musanze</li>
+                        <li>Butare</li>
+                        <li>Gisenyi</li>
+                        <li>Rubavu</li>
+                        <li>Rwamagana</li>
+                        <li>Nyamatara</li>
+                        <li>Gitarama</li>
+                        <li>Kayonza</li>
+                        <li><a href="#">View More</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Payment & App</h4>
+                    <div class="payment-icons">
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-paypal"></i><br>
+                        <i class="fas fa-mobile-alt"></i> MTN Money<br>
+                        <i class="fas fa-mobile-alt"></i> Airtel Money
+                    </div>
+                    <div class="app-download">
+                        <p>Download our app</p>
+                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play" style="height:40px;" loading="lazy">
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 ICYAGWE SHOP. Ibyo Ushaka Byose. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

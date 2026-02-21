@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyagwe · notifications</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: #0b0f19;
+            padding: 30px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* same animated background as login */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(102, 126, 234, 0.25) 0%, transparent 35%),
+                        radial-gradient(circle at 70% 60%, rgba(155, 93, 229, 0.25) 0%, transparent 40%),
+                        radial-gradient(circle at 40% 80%, rgba(237, 100, 166, 0.2) 0%, transparent 45%);
+            animation: rotate 40s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* header with logout */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logout-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* notifications list */
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .notification-card {
+            background: rgba(20, 25, 40, 0.7);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 30px;
+            padding: 24px 28px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.2s;
+        }
+
+        .notification-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(102,126,234,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #a5b4fc;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .notification-meta {
+            display: flex;
+            gap: 16px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        .notification-meta i {
+            margin-right: 4px;
+        }
+
+        .badge {
+            background: #f6ad55;
+            color: #1a1f2e;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            padding: 60px 20px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8rem; }
+            .notification-card { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 Notifications</h1>
+            <a href="login.html" class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+
+        <div class="notifications-list" id="notificationsList">
+            <!-- Notifications will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const userRole = localStorage.getItem('userRole');
+        if (!userRole) {
+            // No role stored → redirect to login
+            window.location.href = 'login.html';
+        }
+
+        // Dummy notifications based on role
+        function getNotifications(role) {
+            if (role === 'buyer') {
+                return [
+                    {
+                        icon: 'fa-tag',
+                        title: 'New product: Nike Air Max',
+                        description: 'Just dropped – grab yours now!',
+                        time: '2 min ago',
+                        badge: 'New'
+                    },
+                    {
+                        icon: 'fa-star',
+                        title: 'Overrated product alert',
+                        description: 'Product "Super Sneakers" has 4.9 stars from 200 reviews.',
+                        time: '1 hour ago',
+                        badge: 'Hot'
+                    },
+                    {
+                        icon: 'fa-exclamation-triangle',
+                        title: 'Low stock: Adidas Ultraboost',
+                        description: 'Only 2 left in your size!',
+                        time: '3 hours ago',
+                        badge: 'Urgent'
+                    },
+                    {
+                        icon: 'fa-percent',
+                        title: 'Flash sale: 30% off all electronics',
+                        description: 'Limited time offer, ends tonight.',
+                        time: '5 hours ago',
+                        badge: 'Sale'
+                    },
+                    {
+                        icon: 'fa-clock',
+                        title: 'Your order #12345 has shipped',
+                        description: 'Track your package now.',
+                        time: 'yesterday',
+                        badge: ''
+                    }
+                ];
+            } else if (role === 'seller') {
+                return [
+                    {
+                        icon: 'fa-comment',
+                        title: 'New comment on your product',
+                        description: 'John: "Amazing quality, fast shipping!"',
+                        time: '10 min ago',
+                        badge: 'New'
+                    },
+                    {
+                        icon: 'fa-shopping-cart',
+                        title: 'New order received',
+                        description: 'Order #98765 – 2 items, total $89.90',
+                        time: '25 min ago',
+                        badge: 'Order'
+                    },
+                    {
+                        icon: 'fa-star',
+                        title: '5-star rating received',
+                        description: 'Customer rated your service 5 stars!',
+                        time: '2 hours ago',
+                        badge: 'Rating'
+                    },
+                    {
+                        icon: 'fa-tags',
+                        title: 'Discount applied to your product',
+                        description: 'Your item "Wireless Earbuds" is now 15% off.',
+                        time: '5 hours ago',
+                        badge: 'Promo'
+                    },
+                    {
+                        icon: 'fa-chart-line',
+                        title: 'Weekly sales report',
+                        description: 'You sold 34 items this week – 20% increase!',
+                        time: '1 day ago',
+                        badge: ''
+                    }
+                ];
+            } else {
+                return [];
+            }
+        }
+
+        // Render notifications
+        const notifications = getNotifications(userRole);
+        const container = document.getElementById('notificationsList');
+
+        if (notifications.length === 0) {
+            container.innerHTML = '<div class="empty-state">No notifications yet. Check back later!</div>';
+        } else {
+            let html = '';
+            notifications.forEach(n => {
+                html += `
+                    <div class="notification-card">
+                        <div class="notification-icon">
+                            <i class="fas ${n.icon}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">${n.title}</div>
+                            <div class="notification-meta">
+                                <span><i class="fas fa-clock"></i> ${n.time}</span>
+                                ${n.badge ? `<span class="badge">${n.badge}</span>` : ''}
+                            </div>
+                            <p style="color: rgba(255,255,255,0.7); margin-top: 8px;">${n.description}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // Logout button clears storage and redirects
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('userRole');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyagwe · login & register</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ========== CSS (same as before, with logo styling added) ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: #0b0f19;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* animated gradient background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(102, 126, 234, 0.25) 0%, transparent 35%),
+                        radial-gradient(circle at 70% 60%, rgba(155, 93, 229, 0.25) 0%, transparent 40%),
+                        radial-gradient(circle at 40% 80%, rgba(237, 100, 166, 0.2) 0%, transparent 45%);
+            animation: rotate 40s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* noise overlay */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* background slogan */
+        .background-slogan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.08;
+            transform: rotate(-6deg) scale(1.3);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.2;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(0,0,0,0.7);
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .background-slogan span {
+            font-size: clamp(2.5rem, 12vw, 7rem);
+            letter-spacing: 0.15em;
+            margin: 0.05em 0;
+            background: linear-gradient(135deg, #ffffff 20%, #c0c0ff 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px #667eea);
+        }
+
+        /* main card container */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .login-card {
+            background: rgba(20, 25, 40, 0.7);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 48px;
+            padding: 48px 44px;
+            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.6),
+                        0 0 0 1px rgba(255, 255, 255, 0.07) inset,
+                        0 0 40px rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes floatIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        /* ===== LOGO STYLING – now looks like a professional icon/wordmark ===== */
+        .brand-logo {
+            width: 80px;               /* smaller, icon-like size */
+            height: auto;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 8px rgba(102,126,234,0.3));
+            transition: transform 0.3s;
+            /* If your image has a background, you can try these */
+            background: transparent !important;  /* ensure no background */
+            mix-blend-mode: normal;              /* keeps original colors */
+            /* Optional: make it monochrome using brightness + sepia – experiment 
+               filter: brightness(0) invert(1);   /* would turn dark images white */
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.02);
+        }
+
+        /* ALTERNATIVE: If you prefer a pure text logo, replace the <img> with this:
+           <div class="text-logo">CYAGWE</div> and uncomment the CSS below:
+        .text-logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        } */
+
+        .brand h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .brand p {
+            color: rgba(255,255,255,0.5);
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 6px;
+        }
+
+        /* form elements (unchanged) */
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.4);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            z-index: 2;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 18px 24px 18px 54px;
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
+            font-size: 1rem;
+            background: rgba(10, 15, 25, 0.6);
+            color: white;
+            font-weight: 500;
+            transition: all 0.25s;
+            backdrop-filter: blur(4px);
+            appearance: none;
+        }
+
+        .input-group select {
+            cursor: pointer;
+        }
+
+        .input-group select option {
+            background: #1a1f2e;
+            color: white;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.35);
+            font-weight: 400;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(20, 30, 50, 0.7);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2), 0 0 20px rgba(102,126,234,0.3);
+        }
+
+        .input-group .toggle-password {
+            left: auto;
+            right: 20px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.4);
+            transition: color 0.2s;
+        }
+
+        .input-group .toggle-password:hover {
+            color: #a5b4fc;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 18px 0 32px;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .options label:hover {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+            border-radius: 4px;
+        }
+
+        .options a {
+            color: #a5b4fc;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s, text-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .options a:hover {
+            color: #c084fc;
+            text-decoration: underline;
+            text-shadow: 0 0 8px #a5b4fc;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea, #9f7aea);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 12px 25px -8px #667eea, 0 0 0 1px rgba(255,255,255,0.2) inset;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 22px 35px -10px #7b4eea, 0 0 0 1px rgba(255,255,255,0.3) inset;
+            background: linear-gradient(135deg, #7789f0, #b185f0);
+        }
+
+        .login-btn:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin: 30px 0 24px;
+            color: rgba(255,255,255,0.5);
+            font-size: 1rem;
+        }
+
+        .signup-link a {
+            color: #a5b4fc;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .signup-link a:hover {
+            color: #c084fc;
+            text-decoration: underline;
+        }
+
+        /* seller section */
+        .seller-section {
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .seller-section p {
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            font-size: 1.05rem;
+        }
+
+        .seller-section p i {
+            color: #f6ad55;
+            margin-right: 8px;
+            filter: drop-shadow(0 0 5px #f6ad55);
+        }
+
+        .seller-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .seller-btn {
+            flex: 1;
+            padding: 14px 0;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            border: 1.5px solid transparent;
+            background: transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .seller-login {
+            background: rgba(255,255,255,0.05);
+            color: #e2e8f0;
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .seller-login:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .seller-signup {
+            background: linear-gradient(135deg, rgba(246, 173, 85, 0.2), rgba(237, 137, 54, 0.3));
+            color: #fbd38d;
+            border-color: #ed8936;
+            box-shadow: 0 0 15px rgba(237, 137, 54, 0.3);
+        }
+
+        .seller-signup:hover {
+            background: linear-gradient(135deg, rgba(246, 173, 85, 0.35), rgba(237, 137, 54, 0.45));
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px -5px #ed8936;
+        }
+
+        /* modal base */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: rgba(25, 30, 45, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            box-shadow: 0 40px 70px -10px black, 0 0 0 1px rgba(255,255,255,0.08) inset;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            animation: slideUp 0.4s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-size: 1.8rem;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            line-height: 1;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            color: #a5b4fc;
+            transform: scale(1.1);
+        }
+
+        .modal h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff, #d6e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal p {
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .modal-input,
+        .modal-select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            font-size: 1rem;
+            background: rgba(10, 15, 25, 0.7);
+            color: white;
+            margin-bottom: 20px;
+            transition: all 0.25s;
+        }
+
+        .modal-input:focus,
+        .modal-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.2), 0 0 20px #667eea;
+        }
+
+        .modal-select {
+            cursor: pointer;
+        }
+
+        .modal-select option {
+            background: #1a1f2e;
+        }
+
+        .file-upload {
+            margin-bottom: 20px;
+        }
+
+        .file-upload label {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .file-upload input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px dashed rgba(255,255,255,0.2);
+            border-radius: 30px;
+            background: rgba(10, 15, 25, 0.5);
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+        }
+
+        .file-upload input[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, #667eea, #9f7aea);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload input[type="file"]::file-selector-button:hover {
+            background: linear-gradient(135deg, #7789f0, #b185f0);
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 40px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .google-btn:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .google-btn i {
+            color: #DB4437;
+            font-size: 1.2rem;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea, #9f7aea);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 10px 20px -8px #667eea;
+            margin-top: 10px;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 30px -8px #9f7aea;
+        }
+
+        .modal-message {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 40px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(72, 187, 120, 0.15);
+            color: #9ae6b4;
+            border: 1px solid rgba(72, 187, 120, 0.4);
+        }
+
+        .error-message {
+            background: rgba(245, 101, 101, 0.15);
+            color: #fc8181;
+            border: 1px solid #fc8181;
+        }
+
+        /* rating stars */
+        .rating {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .rating i {
+            font-size: 2.5rem;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .rating i:hover,
+        .rating i.active {
+            color: #f6ad55;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1.5px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn-home {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .btn-home:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .btn-exit {
+            background: linear-gradient(135deg, #f56565, #ed64a6);
+            color: white;
+        }
+
+        .btn-exit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px #f56565;
+        }
+
+        @media (max-width: 500px) {
+            .login-card { padding: 36px 24px; }
+            .seller-buttons { flex-direction: column; }
+            .background-slogan span { font-size: 2.2rem; }
+            .brand-logo { width: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- background slogan -->
+    <div class="background-slogan" aria-hidden="true">
+        <span>ICYAGWE SHOP</span>
+        <span>IBYOUSHAA BYOSE</span>
+        <span>SHOPNOWFORTHE</span>
+        <span>BESTONLINEDEALS!</span>
+        <span>SHOPNOW</span>
+    </div>
+
+    <div class="container">
+        <div class="login-card">
+            <div class="brand">
+                <!-- ===== YOUR LOGO ===== -->
+                <!-- File name is log.png.png (double extension) -->
+                <img src="log.png.png" alt="Cyagwe Shop Logo" class="brand-logo">
+
+                <!-- If you prefer a text logo instead of an image, replace the line above with:
+                     <div class="text-logo">CYAGWE</div>
+                     and uncomment the .text-logo CSS rule. -->
+
+                <h1>Cyagwe</h1>
+                <p>Online Shop</p>
+            </div>
+
+            <!-- customer login form -->
+            <form id="customerLoginForm">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="loginUsername" name="username" placeholder="Username or Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword('loginPassword')"></i>
+                </div>
+                <div class="options">
+                    <label>
+                        <input type="checkbox" name="remember"> <span>Remember me</span>
+                    </label>
+                    <a href="#" id="forgotPasswordLink">Forgot password?</a>
+                </div>
+                <button type="submit" class="login-btn" id="customerLoginBtn">Log In</button>
+            </form>
+
+            <p class="signup-link">
+                New customer? <a href="#" id="createAccountLink">Create an account</a>
+            </p>
+
+            <!-- seller section -->
+            <div class="seller-section">
+                <p><i class="fas fa-tags"></i> Are you a seller?</p>
+                <div class="seller-buttons">
+                    <a href="#" class="seller-btn seller-login" id="sellerLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login as Seller
+                    </a>
+                    <a href="#" class="seller-btn seller-signup" id="sellerSignupBtn">
+                        <i class="fas fa-user-plus"></i> Sign Up as Seller
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- forgot password modal -->
+    <div id="forgotModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h3>Reset password</h3>
+            <p>Enter your email or username. We'll send a reset link instantly.</p>
+            <input type="text" id="resetIdentifier" class="modal-input" placeholder="Email or username" autocomplete="off">
+            <button id="sendResetBtn" class="modal-btn">Send reset link</button>
+            <div id="resetMessage" class="modal-message"></div>
+        </div>
+    </div>
+
+    <!-- customer registration modal (with Google option) -->
+    <div id="customerRegisterModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeCustomerRegister">&times;</span>
+            <h3>Join Cyagwe</h3>
+            <p>Create an account or continue with Google</p>
+            
+            <!-- Google button -->
+            <button class="google-btn" id="customerGoogleRegister">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <div class="divider"><span>or</span></div>
+            
+            <!-- registration form -->
+            <form id="customerRegisterForm">
+                <input type="text" name="firstName" class="modal-input" placeholder="First name" required>
+                <input type="text" name="lastName" class="modal-input" placeholder="Last name" required>
+                <input type="email" name="email" class="modal-input" placeholder="Email address" required>
+                <input type="text" name="username" class="modal-input" placeholder="Username" required>
+                <input type="password" name="password" class="modal-input" placeholder="Password (min. 6 characters)" pattern=".{6,}" title="Minimum 6 characters" required>
+                <input type="password" name="confirmPassword" class="modal-input" placeholder="Confirm password" required>
+                <button type="submit" class="modal-btn">Create account</button>
+                <div id="customerRegisterMessage" class="modal-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- seller login modal -->
+    <div id="sellerLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeSellerLogin">&times;</span>
+            <h3>Seller login</h3>
+            <p>Access your seller dashboard.</p>
+            <button class="google-btn" id="sellerGoogleLogin"><i class="fab fa-google"></i> Continue with Google</button>
+            <div class="divider"><span>or</span></div>
+            <form id="sellerLoginForm">
+                <input type="text" name="username" class="modal-input" placeholder="Username or Email" required>
+                <input type="password" name="password" class="modal-input" placeholder="Password" required>
+                <button type="submit" class="modal-btn">Log In</button>
+                <div id="sellerLoginMessage" class="modal-message"></div>
+            </form>
+            <p style="text-align: center; margin-top: 20px; color: rgba(255,255,255,0.5);">
+                Don't have an account? <a href="#" id="goToSellerSignup" style="color: #a5b4fc;">Sign up as seller</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- seller registration modal (detailed) -->
+    <div id="sellerRegisterModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeSellerRegister">&times;</span>
+            <h3>Create seller account</h3>
+            <p>Fill in your details to start selling on Cyagwe.</p>
+            <form id="sellerRegisterForm" enctype="multipart/form-data">
+                <input type="text" name="firstName" class="modal-input" placeholder="First name" required>
+                <input type="text" name="lastName" class="modal-input" placeholder="Last name" required>
+                <select name="category" class="modal-select" required>
+                    <option value="" disabled selected>What do you sell?</option>
+                    <option value="clothes_shoes">Clothes & Shoes</option>
+                    <option value="electronics">Electronic Devices</option>
+                    <option value="other">Others</option>
+                </select>
+                <input type="email" name="email" class="modal-input" placeholder="Email address" required>
+                <input type="password" name="password" class="modal-input" placeholder="Password (6+ chars, letters & digits)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" title="Minimum 6 characters, at least one letter and one digit" required>
+                <input type="password" name="confirmPassword" class="modal-input" placeholder="Confirm password" required>
+                <select name="idType" class="modal-select" required>
+                    <option value="" disabled selected>ID type</option>
+                    <option value="passport">Passport</option>
+                    <option value="driving_license">Driving License</option>
+                    <option value="national_id">National ID</option>
+                </select>
+                
+                <!-- Country dropdown -->
+                <select name="nationality" class="modal-select" required>
+                    <option value="" disabled selected>Select your country</option>
+                    <option value="Afghanistan">Afghanistan</option>
+                    <option value="Albania">Albania</option>
+                    <option value="Algeria">Algeria</option>
+                    <option value="Andorra">Andorra</option>
+                    <option value="Angola">Angola</option>
+                    <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Armenia">Armenia</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Austria">Austria</option>
+                    <option value="Azerbaijan">Azerbaijan</option>
+                    <option value="Bahamas">Bahamas</option>
+                    <option value="Bahrain">Bahrain</option>
+                    <option value="Bangladesh">Bangladesh</option>
+                    <option value="Barbados">Barbados</option>
+                    <option value="Belarus">Belarus</option>
+                    <option value="Belgium">Belgium</option>
+                    <option value="Belize">Belize</option>
+                    <option value="Benin">Benin</option>
+                    <option value="Bhutan">Bhutan</option>
+                    <option value="Bolivia">Bolivia</option>
+                    <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                    <option value="Botswana">Botswana</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="Brunei">Brunei</option>
+                    <option value="Bulgaria">Bulgaria</option>
+                    <option value="Burkina Faso">Burkina Faso</option>
+                    <option value="Burundi">Burundi</option>
+                    <option value="Cabo Verde">Cabo Verde</option>
+                    <option value="Cambodia">Cambodia</option>
+                    <option value="Cameroon">Cameroon</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Central African Republic">Central African Republic</option>
+                    <option value="Chad">Chad</option>
+                    <option value="Chile">Chile</option>
+                    <option value="China">China</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Comoros">Comoros</option>
+                    <option value="Congo">Congo</option>
+                    <option value="Costa Rica">Costa Rica</option>
+                    <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+                    <option value="Croatia">Croatia</option>
+                    <option value="Cuba">Cuba</option>
+                    <option value="Cyprus">Cyprus</option>
+                    <option value="Czech Republic">Czech Republic</option>
+                    <option value="Denmark">Denmark</option>
+                    <option value="Djibouti">Djibouti</option>
+                    <option value="Dominica">Dominica</option>
+                    <option value="Dominican Republic">Dominican Republic</option>
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="Egypt">Egypt</option>
+                    <option value="El Salvador">El Salvador</option>
+                    <option value="Equatorial Guinea">Equatorial Guinea</option>
+                    <option value="Eritrea">Eritrea</option>
+                    <option value="Estonia">Estonia</option>
+                    <option value="Eswatini">Eswatini</option>
+                    <option value="Ethiopia">Ethiopia</option>
+                    <option value="Fiji">Fiji</option>
+                    <option value="Finland">Finland</option>
+                    <option value="France">France</option>
+                    <option value="Gabon">Gabon</option>
+                    <option value="Gambia">Gambia</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Ghana">Ghana</option>
+                    <option value="Greece">Greece</option>
+                    <option value="Grenada">Grenada</option>
+                    <option value="Guatemala">Guatemala</option>
+                    <option value="Guinea">Guinea</option>
+                    <option value="Guinea-Bissau">Guinea-Bissau</option>
+                    <option value="Guyana">Guyana</option>
+                    <option value="Haiti">Haiti</option>
+                    <option value="Honduras">Honduras</option>
+                    <option value="Hungary">Hungary</option>
+                    <option value="Iceland">Iceland</option>
+                    <option value="India">India</option>
+                    <option value="Indonesia">Indonesia</option>
+                    <option value="Iran">Iran</option>
+                    <option value="Iraq">Iraq</option>
+                    <option value="Ireland">Ireland</option>
+                    <option value="Israel">Israel</option>
+                    <option value="Italy">Italy</option>
+                    <option value="Jamaica">Jamaica</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Jordan">Jordan</option>
+                    <option value="Kazakhstan">Kazakhstan</option>
+                    <option value="Kenya">Kenya</option>
+                    <option value="Kiribati">Kiribati</option>
+                    <option value="Kuwait">Kuwait</option>
+                    <option value="Kyrgyzstan">Kyrgyzstan</option>
+                    <option value="Laos">Laos</option>
+                    <option value="Latvia">Latvia</option>
+                    <option value="Lebanon">Lebanon</option>
+                    <option value="Lesotho">Lesotho</option>
+                    <option value="Liberia">Liberia</option>
+                    <option value="Libya">Libya</option>
+                    <option value="Liechtenstein">Liechtenstein</option>
+                    <option value="Lithuania">Lithuania</option>
+                    <option value="Luxembourg">Luxembourg</option>
+                    <option value="Madagascar">Madagascar</option>
+                    <option value="Malawi">Malawi</option>
+                    <option value="Malaysia">Malaysia</option>
+                    <option value="Maldives">Maldives</option>
+                    <option value="Mali">Mali</option>
+                    <option value="Malta">Malta</option>
+                    <option value="Marshall Islands">Marshall Islands</option>
+                    <option value="Mauritania">Mauritania</option>
+                    <option value="Mauritius">Mauritius</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Micronesia">Micronesia</option>
+                    <option value="Moldova">Moldova</option>
+                    <option value="Monaco">Monaco</option>
+                    <option value="Mongolia">Mongolia</option>
+                    <option value="Montenegro">Montenegro</option>
+                    <option value="Morocco">Morocco</option>
+                    <option value="Mozambique">Mozambique</option>
+                    <option value="Myanmar">Myanmar</option>
+                    <option value="Namibia">Namibia</option>
+                    <option value="Nauru">Nauru</option>
+                    <option value="Nepal">Nepal</option>
+                    <option value="Netherlands">Netherlands</option>
+                    <option value="New Zealand">New Zealand</option>
+                    <option value="Nicaragua">Nicaragua</option>
+                    <option value="Niger">Niger</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="North Korea">North Korea</option>
+                    <option value="North Macedonia">North Macedonia</option>
+                    <option value="Norway">Norway</option>
+                    <option value="Oman">Oman</option>
+                    <option value="Pakistan">Pakistan</option>
+                    <option value="Palau">Palau</option>
+                    <option value="Palestine">Palestine</option>
+                    <option value="Panama">Panama</option>
+                    <option value="Papua New Guinea">Papua New Guinea</option>
+                    <option value="Paraguay">Paraguay</option>
+                    <option value="Peru">Peru</option>
+                    <option value="Philippines">Philippines</option>
+                    <option value="Poland">Poland</option>
+                    <option value="Portugal">Portugal</option>
+                    <option value="Qatar">Qatar</option>
+                    <option value="Romania">Romania</option>
+                    <option value="Russia">Russia</option>
+                    <option value="Rwanda">Rwanda</option>
+                    <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                    <option value="Saint Lucia">Saint Lucia</option>
+                    <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+                    <option value="Samoa">Samoa</option>
+                    <option value="San Marino">San Marino</option>
+                    <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+                    <option value="Saudi Arabia">Saudi Arabia</option>
+                    <option value="Senegal">Senegal</option>
+                    <option value="Serbia">Serbia</option>
+                    <option value="Seychelles">Seychelles</option>
+                    <option value="Sierra Leone">Sierra Leone</option>
+                    <option value="Singapore">Singapore</option>
+                    <option value="Slovakia">Slovakia</option>
+                    <option value="Slovenia">Slovenia</option>
+                    <option value="Solomon Islands">Solomon Islands</option>
+                    <option value="Somalia">Somalia</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="South Korea">South Korea</option>
+                    <option value="South Sudan">South Sudan</option>
+                    <option value="Spain">Spain</option>
+                    <option value="Sri Lanka">Sri Lanka</option>
+                    <option value="Sudan">Sudan</option>
+                    <option value="Suriname">Suriname</option>
+                    <option value="Sweden">Sweden</option>
+                    <option value="Switzerland">Switzerland</option>
+                    <option value="Syria">Syria</option>
+                    <option value="Taiwan">Taiwan</option>
+                    <option value="Tajikistan">Tajikistan</option>
+                    <option value="Tanzania">Tanzania</option>
+                    <option value="Thailand">Thailand</option>
+                    <option value="Timor-Leste">Timor-Leste</option>
+                    <option value="Togo">Togo</option>
+                    <option value="Tonga">Tonga</option>
+                    <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                    <option value="Tunisia">Tunisia</option>
+                    <option value="Turkey">Turkey</option>
+                    <option value="Turkmenistan">Turkmenistan</option>
+                    <option value="Tuvalu">Tuvalu</option>
+                    <option value="Uganda">Uganda</option>
+                    <option value="Ukraine">Ukraine</option>
+                    <option value="United Arab Emirates">United Arab Emirates</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="United States">United States</option>
+                    <option value="Uruguay">Uruguay</option>
+                    <option value="Uzbekistan">Uzbekistan</option>
+                    <option value="Vanuatu">Vanuatu</option>
+                    <option value="Vatican City">Vatican City</option>
+                    <option value="Venezuela">Venezuela</option>
+                    <option value="Vietnam">Vietnam</option>
+                    <option value="Yemen">Yemen</option>
+                    <option value="Zambia">Zambia</option>
+                    <option value="Zimbabwe">Zimbabwe</option>
+                </select>
+
+                <div class="file-upload">
+                    <label>Front of ID (image)</label>
+                    <input type="file" name="idFront" accept="image/*" required>
+                </div>
+                <div class="file-upload">
+                    <label>Back of ID (image)</label>
+                    <input type="file" name="idBack" accept="image/*" required>
+                </div>
+                <button type="submit" class="modal-btn">Register</button>
+                <div id="sellerRegisterMessage" class="modal-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- rating modal -->
+    <div id="ratingModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <span class="modal-close" id="closeRating">&times;</span>
+            <h3>How was your experience?</h3>
+            <p>Please rate our website</p>
+            <div class="rating" id="starRating">
+                <i class="far fa-star" data-value="1"></i>
+                <i class="far fa-star" data-value="2"></i>
+                <i class="far fa-star" data-value="3"></i>
+                <i class="far fa-star" data-value="4"></i>
+                <i class="far fa-star" data-value="5"></i>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn btn-home" id="submitRating">Submit</button>
+                <button class="action-btn btn-exit" id="skipRating">Skip</button>
+            </div>
+            <div id="ratingMessage" class="modal-message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleIcon = passwordInput.parentElement.querySelector('.toggle-password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // ---------- Forgot password modal ----------
+        const forgotModal = document.getElementById('forgotModal');
+        const forgotLink = document.getElementById('forgotPasswordLink');
+        const closeForgot = document.getElementById('closeModal');
+        const sendResetBtn = document.getElementById('sendResetBtn');
+        const resetIdentifier = document.getElementById('resetIdentifier');
+        const resetMessage = document.getElementById('resetMessage');
+
+        forgotLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            forgotModal.style.display = 'flex';
+            resetIdentifier.value = '';
+            resetMessage.classList.remove('show');
+        });
+
+        closeForgot.addEventListener('click', function() {
+            forgotModal.style.display = 'none';
+        });
+
+        sendResetBtn.addEventListener('click', function() {
+            const identifier = resetIdentifier.value.trim();
+            if (identifier === '') {
+                resetMessage.innerHTML = 'Please enter your email or username.';
+                resetMessage.className = 'modal-message show error-message';
+                return;
+            }
+            resetMessage.innerHTML = `✨ Reset link sent to <strong>${identifier}</strong> (demo). Check your inbox.`;
+            resetMessage.className = 'modal-message show success-message';
+            resetIdentifier.value = '';
+        });
+
+        // ---------- Customer registration ----------
+        const customerRegisterModal = document.getElementById('customerRegisterModal');
+        const createAccountLink = document.getElementById('createAccountLink');
+        const closeCustomerRegister = document.getElementById('closeCustomerRegister');
+        const customerRegisterForm = document.getElementById('customerRegisterForm');
+        const customerRegisterMessage = document.getElementById('customerRegisterMessage');
+        const customerGoogleRegister = document.getElementById('customerGoogleRegister');
+
+        createAccountLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            customerRegisterModal.style.display = 'flex';
+            customerRegisterForm.reset();
+            customerRegisterMessage.classList.remove('show');
+        });
+
+        closeCustomerRegister.addEventListener('click', function() {
+            customerRegisterModal.style.display = 'none';
+        });
+
+        customerGoogleRegister.addEventListener('click', function() {
+            customerRegisterMessage.innerHTML = '✅ Google sign-up successful! Redirecting...';
+            customerRegisterMessage.className = 'modal-message show success-message';
+            setTimeout(() => {
+                customerRegisterModal.style.display = 'none';
+                showRatingModal();
+            }, 1500);
+        });
+
+        customerRegisterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = customerRegisterForm.password.value;
+            const confirm = customerRegisterForm.confirmPassword.value;
+            if (password !== confirm) {
+                customerRegisterMessage.innerHTML = 'Passwords do not match.';
+                customerRegisterMessage.className = 'modal-message show error-message';
+                return;
+            }
+            if (password.length < 6) {
+                customerRegisterMessage.innerHTML = 'Password must be at least 6 characters.';
+                customerRegisterMessage.className = 'modal-message show error-message';
+                return;
+            }
+            customerRegisterMessage.innerHTML = '✅ Account created! You can now log in.';
+            customerRegisterMessage.className = 'modal-message show success-message';
+            customerRegisterForm.reset();
+            setTimeout(() => {
+                customerRegisterModal.style.display = 'none';
+                showRatingModal();
+            }, 1500);
+        });
+
+        // ---------- Seller login modal ----------
+        const sellerLoginModal = document.getElementById('sellerLoginModal');
+        const sellerLoginBtn = document.getElementById('sellerLoginBtn');
+        const closeSellerLogin = document.getElementById('closeSellerLogin');
+        const sellerLoginForm = document.getElementById('sellerLoginForm');
+        const sellerLoginMessage = document.getElementById('sellerLoginMessage');
+        const sellerGoogleLogin = document.getElementById('sellerGoogleLogin');
+        const goToSellerSignup = document.getElementById('goToSellerSignup');
+
+        sellerLoginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            sellerLoginModal.style.display = 'flex';
+            sellerLoginForm.reset();
+            sellerLoginMessage.classList.remove('show');
+        });
+
+        closeSellerLogin.addEventListener('click', function() {
+            sellerLoginModal.style.display = 'none';
+        });
+
+        sellerGoogleLogin.addEventListener('click', function() {
+            sellerLoginMessage.innerHTML = '✅ Google login successful! Welcome, seller!';
+            sellerLoginMessage.className = 'modal-message show success-message';
+            setTimeout(() => {
+                sellerLoginModal.style.display = 'none';
+                showRatingModal();
+            }, 1500);
+        });
+
+        sellerLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = sellerLoginForm.username.value.trim();
+            const password = sellerLoginForm.password.value.trim();
+            if (!username || !password) {
+                sellerLoginMessage.innerHTML = 'Please enter both fields.';
+                sellerLoginMessage.className = 'modal-message show error-message';
+                return;
+            }
+            sellerLoginMessage.innerHTML = '✅ Login successful! Redirecting...';
+            sellerLoginMessage.className = 'modal-message show success-message';
+            setTimeout(() => {
+                sellerLoginModal.style.display = 'none';
+                showRatingModal();
+            }, 1500);
+        });
+
+        goToSellerSignup.addEventListener('click', function(e) {
+            e.preventDefault();
+            sellerLoginModal.style.display = 'none';
+            sellerRegisterModal.style.display = 'flex';
+        });
+
+        // ---------- Seller registration (detailed) ----------
+        const sellerRegisterModal = document.getElementById('sellerRegisterModal');
+        const sellerSignupBtn = document.getElementById('sellerSignupBtn');
+        const closeSellerRegister = document.getElementById('closeSellerRegister');
+        const sellerRegisterForm = document.getElementById('sellerRegisterForm');
+        const sellerRegisterMessage = document.getElementById('sellerRegisterMessage');
+
+        sellerSignupBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            sellerRegisterModal.style.display = 'flex';
+            sellerRegisterForm.reset();
+            sellerRegisterMessage.classList.remove('show');
+        });
+
+        closeSellerRegister.addEventListener('click', function() {
+            sellerRegisterModal.style.display = 'none';
+        });
+
+        sellerRegisterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const password = sellerRegisterForm.password.value;
+            const confirm = sellerRegisterForm.confirmPassword.value;
+            if (password !== confirm) {
+                sellerRegisterMessage.innerHTML = 'Passwords do not match.';
+                sellerRegisterMessage.className = 'modal-message show error-message';
+                return;
+            }
+            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            if (!passwordPattern.test(password)) {
+                sellerRegisterMessage.innerHTML = 'Password must be at least 6 characters and contain both letters and digits.';
+                sellerRegisterMessage.className = 'modal-message show error-message';
+                return;
+            }
+
+            sellerRegisterMessage.innerHTML = '✅ Registration successful! You will be verified soon. You can now log in.';
+            sellerRegisterMessage.className = 'modal-message show success-message';
+            sellerRegisterForm.reset();
+
+            setTimeout(() => {
+                sellerRegisterModal.style.display = 'none';
+                sellerLoginModal.style.display = 'flex';
+            }, 1500);
+        });
+
+        // ---------- Customer login (main form) ----------
+        const customerLoginForm = document.getElementById('customerLoginForm');
+
+        customerLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if (!username || !password) {
+                alert('Please enter both username and password.');
+                return;
+            }
+            alert('Login successful!');
+            showRatingModal();
+        });
+
+        // ---------- Rating modal ----------
+        const ratingModal = document.getElementById('ratingModal');
+        const closeRating = document.getElementById('closeRating');
+        const submitRating = document.getElementById('submitRating');
+        const skipRating = document.getElementById('skipRating');
+        const stars = document.querySelectorAll('#starRating i');
+        const ratingMessage = document.getElementById('ratingMessage');
+        let selectedRating = 0;
+
+        function showRatingModal() {
+            ratingModal.style.display = 'flex';
+            stars.forEach(star => {
+                star.classList.remove('fas', 'active');
+                star.classList.add('far');
+            });
+            selectedRating = 0;
+            ratingMessage.classList.remove('show');
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('mouseenter', function() {
+                const value = this.dataset.value;
+                highlightStars(value);
+            });
+            star.addEventListener('mouseleave', function() {
+                highlightStars(selectedRating);
+            });
+            star.addEventListener('click', function() {
+                selectedRating = this.dataset.value;
+                highlightStars(selectedRating);
+            });
+        });
+
+        function highlightStars(value) {
+            stars.forEach(star => {
+                if (star.dataset.value <= value) {
+                    star.classList.remove('far');
+                    star.classList.add('fas', 'active');
+                } else {
+                    star.classList.remove('fas', 'active');
+                    star.classList.add('far');
+                }
+            });
+        }
+
+        submitRating.addEventListener('click', function() {
+            if (selectedRating == 0) {
+                ratingMessage.innerHTML = 'Please select a rating.';
+                ratingMessage.className = 'modal-message show error-message';
+                return;
+            }
+            ratingMessage.innerHTML = `Thank you for rating us ${selectedRating} stars!`;
+            ratingMessage.className = 'modal-message show success-message';
+            setTimeout(() => {
+                ratingModal.style.display = 'none';
+                window.location.href = 'home.html';
+            }, 1500);
+        });
+
+        skipRating.addEventListener('click', function() {
+            ratingModal.style.display = 'none';
+            window.location.href = 'home.html';
+        });
+
+        closeRating.addEventListener('click', function() {
+            ratingModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
