@@ -1331,3 +1331,45 @@ body.dark-mode .view-all-btn:hover {
         font-size: 1.6rem;
     }
 }
+
+/* ========== EXTRA MOBILE FIXES ========== */
+/* Very small phones (under 400px) */
+@media (max-width: 400px) {
+    .hero-slideshow {
+        height: 180px;
+    }
+    .product-title-new {
+        font-size: 0.85rem;
+        min-height: 2.4rem;
+    }
+    .add-plus {
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+    }
+    .header-icons {
+        gap: 8px;
+        font-size: 1.1rem;
+    }
+    .cart-badge {
+        padding: 4px 10px;
+    }
+    .nav-links a {
+        font-size: 0.9rem;
+        padding: 10px 0;
+    }
+    .footer-grid {
+        gap: 20px;
+    }
+}
+
+/* Category panel clickable on mobile */
+@media (max-width: 992px) {
+    .category-panel {
+        transition: opacity 0.2s, visibility 0.2s;
+    }
+    .category-panel.show {
+        opacity: 1;
+        visibility: visible;
+    }
+}
