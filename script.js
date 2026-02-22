@@ -204,10 +204,10 @@
 
         // ========== YOUR MEDIA PATHS ==========
         const mediaList = [
-            { type: 'image', src: 'img/banner1.jpg' },
-            { type: 'image', src: 'img/banner2.jpg' },
-            { type: 'video', src: 'video/vd1.mp4' },
-            { type: 'video', src: 'video/vd2.mp4' }
+            { type: 'video', src: 'video/vd1.hd.mp4.mp4' },
+            { type: 'video', src: 'video/vd2.hd.mp4.mp4' },
+            { type: 'video', src: 'video/vd3.hd.mp4.mp4' },
+            { type: 'video', src: 'video/vd6.hd.mp4.mp4' }
         ];
 
         console.log('Building slides with mediaList:', mediaList);
