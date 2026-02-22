@@ -206,8 +206,8 @@
             { type: 'video', src: 'video/vd3.hd.mp4.mp4' },
             { type: 'video', src: 'video/vd6.hd.mp4.mp4' },
             // Add two more slides – replace with your own files
-            { type: 'video', src: 'video/vd7.mp4' },       // new video
-            { type: 'image', src: 'img/placeholder.jpg' }  // or an image
+            { type: 'video', src: 'video/vd7.hd.mp4.mp4' },       // new video
+            { type: 'image', src: 'log.png.png' }  // or an image
         ];
 
         container.innerHTML = ''; // clear existing
