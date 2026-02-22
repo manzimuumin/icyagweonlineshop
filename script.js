@@ -194,23 +194,23 @@
         showAddedMessage(modalAddBtn);
     });
 
-    // ==================== HERO SLIDESHOW (UPDATED FOR MOBILE & NONSTOP) ====================
+    // ==================== HERO SLIDESHOW (6 slides, non‑stop) ====================
     (function() {
         const container = document.getElementById('heroSlideshow');
-        if (!container) {
-            console.error('Slideshow container not found!');
-            return;
-        }
+        if (!container) return;
 
-        // ========== YOUR MEDIA PATHS ==========
+        // ----- DEFINE YOUR 6 SLIDES (adjust paths as needed) -----
         const mediaList = [
             { type: 'video', src: 'video/vd1.hd.mp4.mp4' },
             { type: 'video', src: 'video/vd2.hd.mp4.mp4' },
             { type: 'video', src: 'video/vd3.hd.mp4.mp4' },
-            { type: 'video', src: 'video/vd6.hd.mp4.mp4' }
+            { type: 'video', src: 'video/vd6.hd.mp4.mp4' },
+            // Add two more slides – replace with your own files
+            { type: 'video', src: 'video/vd7.mp4' },       // new video
+            { type: 'image', src: 'img/placeholder.jpg' }  // or an image
         ];
 
-        console.log('Building slides with mediaList:', mediaList);
+        container.innerHTML = ''; // clear existing
 
         mediaList.forEach((media, index) => {
             let element;
@@ -218,19 +218,18 @@
                 element = document.createElement('img');
                 element.src = media.src;
                 element.alt = `Slide ${index+1}`;
-                element.onerror = () => console.error(`Failed to load image: ${media.src}`);
+                element.onerror = () => console.warn(`Image failed: ${media.src}`);
             } else {
                 element = document.createElement('video');
                 element.src = media.src;
-                element.loop = false;               // we want to advance after video ends, not loop
-                element.muted = true;                // required for autoplay on most devices
-                element.playsInline = true;           // important for iOS
-                element.preload = 'auto';              // helps with playback
-                element.autoplay = false;              // will be started when slide becomes active
+                element.muted = true;          // MUST be muted for autoplay
+                element.playsInline = true;     // crucial for iOS
+                element.preload = 'auto';
+                element.loop = false;           // we advance manually
                 element.onerror = (e) => {
-                    console.error(`Video error (${media.src}):`, e);
+                    console.warn(`Video error (${media.src}):`, e);
+                    element.classList.add('failed');
                 };
-                element.onloadeddata = () => console.log(`Video loaded: ${media.src}`);
             }
             element.classList.add('slide');
             if (index === 0) element.classList.add('active');
@@ -238,7 +237,6 @@
         });
 
         const slides = document.querySelectorAll('#heroSlideshow .slide');
-        console.log(`Total slides created: ${slides.length}`);
         if (slides.length === 0) return;
 
         let currentSlide = 0;
@@ -251,49 +249,63 @@
                 timeoutId = null;
             }
 
-            // Pause current slide if it's a video
             if (slides[currentSlide].tagName === 'VIDEO') {
                 slides[currentSlide].pause();
             }
 
-            // Update active class
             slides[currentSlide].classList.remove('active');
             currentSlide = index;
             slides[currentSlide].classList.add('active');
 
             const current = slides[currentSlide];
 
+            if (current.classList.contains('failed')) {
+                timeoutId = setTimeout(() => {
+                    goToSlide((currentSlide + 1) % totalSlides);
+                }, 2000);
+                return;
+            }
+
             if (current.tagName === 'VIDEO') {
-                // Reset video to start (in case it was partially played)
                 current.currentTime = 0;
                 const playPromise = current.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
-                        console.log('Video autoplay failed, moving to next slide:', error);
-                        // If play fails, move to next slide after a short delay
+                        console.log('Autoplay prevented, moving to next slide:', error);
                         timeoutId = setTimeout(() => {
                             goToSlide((currentSlide + 1) % totalSlides);
                         }, 2000);
                     });
                 }
-                // When video ends, go to next slide
                 const onEnded = function() {
-                    console.log('Video ended, moving to next slide');
                     goToSlide((currentSlide + 1) % totalSlides);
                     current.removeEventListener('ended', onEnded);
                 };
                 current.addEventListener('ended', onEnded);
             } else {
-                // Image: set timer to advance
                 timeoutId = setTimeout(() => {
                     goToSlide((currentSlide + 1) % totalSlides);
                 }, 6000);
             }
         }
 
-        // Start the slideshow
         goToSlide(0);
     })();
+
+    // ==================== CATEGORY PANEL CLICKABLE ON MOBILE ====================
+    const catBtn = document.querySelector('.categories-btn');
+    const catPanel = document.querySelector('.category-panel');
+    if (catBtn && catPanel) {
+        catBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            catPanel.classList.toggle('show');
+        });
+        document.addEventListener('click', (e) => {
+            if (!catBtn.contains(e.target) && !catPanel.contains(e.target)) {
+                catPanel.classList.remove('show');
+            }
+        });
+    }
 
     // ==================== TICKER CLICK ====================
     document.querySelectorAll('.ticker-item').forEach(item => {
