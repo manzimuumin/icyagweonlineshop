@@ -66,13 +66,6 @@
         const count = document.getElementById('cartCount');
         if (count) count.textContent = total;
     };
-
-    // NEW: function to get the latest price from the product card using its ID
-    window.getCurrentProductPrice = function(productId) {
-        const card = document.querySelector(`.product-card-new[data-id="${productId}"]`);
-        return card ? parseFloat(card.dataset.price) : null;
-    };
-
     const showAddedMessage = (el) => {
         const msg = document.createElement('span');
         msg.textContent = '✓ Added';
@@ -104,7 +97,7 @@
         if (!card) return;
         const id = card.dataset.id;
         const name = card.dataset.name;
-        const price = parseFloat(card.dataset.price); // store current price
+        const price = parseFloat(card.dataset.price);
         const desc = card.dataset.description || '';
         const imgContainer = card.querySelector('.product-img-new');
         let imageType = 'icon', imageSrc = 'box', imageHtml = '';
@@ -127,13 +120,8 @@
         }
         const cart = getCart();
         const existing = cart.find(item => item.id == id);
-        if (existing) {
-            existing.quantity = (existing.quantity || 1) + 1;
-            // Optionally update price to current value – uncomment next line to always use latest price
-            // existing.price = price;
-        } else {
-            cart.push({ id, name, price, description: desc, imageType, imageSrc, imageHtml, quantity: 1 });
-        }
+        if (existing) existing.quantity = (existing.quantity || 1) + 1;
+        else cart.push({ id, name, price, description: desc, imageType, imageSrc, imageHtml, quantity: 1 });
         saveCart(cart);
         showAddedMessage(plusElement);
     };
@@ -199,29 +187,30 @@
         }
         const cart = getCart();
         const existing = cart.find(item => item.id == id);
-        if (existing) {
-            existing.quantity = (existing.quantity || 1) + 1;
-            // existing.price = parseFloat(price); // uncomment to always use latest price
-        } else {
-            cart.push({ id, name, price: parseFloat(price), description: desc, imageType, imageSrc, imageHtml, quantity: 1 });
-        }
+        if (existing) existing.quantity = (existing.quantity || 1) + 1;
+        else cart.push({ id, name, price: parseFloat(price), description: desc, imageType, imageSrc, imageHtml, quantity: 1 });
         saveCart(cart);
         modal.classList.remove('show');
         showAddedMessage(modalAddBtn);
     });
 
-    // ==================== HERO SLIDESHOW (CORRECTED) ====================
+    // ==================== HERO SLIDESHOW (UPDATED FOR MOBILE & NONSTOP) ====================
     (function() {
         const container = document.getElementById('heroSlideshow');
-        if (!container) return;
+        if (!container) {
+            console.error('Slideshow container not found!');
+            return;
+        }
 
-        // ========== YOUR VIDEO PATHS (CORRECTED) ==========
+        // ========== YOUR MEDIA PATHS ==========
         const mediaList = [
-            { type: 'video', src: 'video/vd3.hd.mp4.mp4' },   // replace with your actual image
-            { type: 'video', src: 'video/vd6.hd.mp4.mp4' },   // replace with your actual image
-            { type: 'video', src: 'video/vd1.hd.mp4.mp4' },     // <-- video folder, file vd1.mp4
-            { type: 'video', src: 'video/vd2.hd.mp4.mp4' }      // <-- video folder, file vd2.mp4
+            { type: 'image', src: 'img/banner1.jpg' },
+            { type: 'image', src: 'img/banner2.jpg' },
+            { type: 'video', src: 'video/vd1.mp4' },
+            { type: 'video', src: 'video/vd2.mp4' }
         ];
+
+        console.log('Building slides with mediaList:', mediaList);
 
         mediaList.forEach((media, index) => {
             let element;
@@ -229,13 +218,19 @@
                 element = document.createElement('img');
                 element.src = media.src;
                 element.alt = `Slide ${index+1}`;
+                element.onerror = () => console.error(`Failed to load image: ${media.src}`);
             } else {
                 element = document.createElement('video');
                 element.src = media.src;
-                element.loop = false;
-                element.muted = true;
-                element.playsInline = true;
-                element.autoplay = false;
+                element.loop = false;               // we want to advance after video ends, not loop
+                element.muted = true;                // required for autoplay on most devices
+                element.playsInline = true;           // important for iOS
+                element.preload = 'auto';              // helps with playback
+                element.autoplay = false;              // will be started when slide becomes active
+                element.onerror = (e) => {
+                    console.error(`Video error (${media.src}):`, e);
+                };
+                element.onloadeddata = () => console.log(`Video loaded: ${media.src}`);
             }
             element.classList.add('slide');
             if (index === 0) element.classList.add('active');
@@ -243,6 +238,7 @@
         });
 
         const slides = document.querySelectorAll('#heroSlideshow .slide');
+        console.log(`Total slides created: ${slides.length}`);
         if (slides.length === 0) return;
 
         let currentSlide = 0;
@@ -255,30 +251,47 @@
                 timeoutId = null;
             }
 
-            slides[currentSlide].classList.remove('active');
+            // Pause current slide if it's a video
             if (slides[currentSlide].tagName === 'VIDEO') {
                 slides[currentSlide].pause();
             }
 
+            // Update active class
+            slides[currentSlide].classList.remove('active');
             currentSlide = index;
-
             slides[currentSlide].classList.add('active');
+
             const current = slides[currentSlide];
 
             if (current.tagName === 'VIDEO') {
-                current.play().catch(e => console.log('Video play failed:', e));
+                // Reset video to start (in case it was partially played)
+                current.currentTime = 0;
+                const playPromise = current.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log('Video autoplay failed, moving to next slide:', error);
+                        // If play fails, move to next slide after a short delay
+                        timeoutId = setTimeout(() => {
+                            goToSlide((currentSlide + 1) % totalSlides);
+                        }, 2000);
+                    });
+                }
+                // When video ends, go to next slide
                 const onEnded = function() {
+                    console.log('Video ended, moving to next slide');
                     goToSlide((currentSlide + 1) % totalSlides);
                     current.removeEventListener('ended', onEnded);
                 };
                 current.addEventListener('ended', onEnded);
             } else {
+                // Image: set timer to advance
                 timeoutId = setTimeout(() => {
                     goToSlide((currentSlide + 1) % totalSlides);
-                }, 6000); // change image every 6 seconds
+                }, 6000);
             }
         }
 
+        // Start the slideshow
         goToSlide(0);
     })();
 
